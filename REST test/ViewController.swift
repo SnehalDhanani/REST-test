@@ -10,9 +10,33 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var listData = [[String : AnyObject]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        let url:String = ""
+        
+        let urlRequest = URL(string: url)
+        
+        URLSession.shared.dataTask(with: urlRequest!, completionHandler: {
+        (data, response, error) in
+            if (error != nil)
+            {
+               // print(error.debugDescription)
+            }
+            else{
+                do{
+                    self.listData = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [[String: AnyObject]]; OperationQueue.main.addOperation {
+                        print("Load data")
+                    }
+                }
+                catch let error as NSError {
+                    
+                    print(error)
+                }
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
